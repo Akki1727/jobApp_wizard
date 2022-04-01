@@ -1,0 +1,717 @@
+<?php
+
+include 'config.php';
+
+$user = $edu = $work = $skill = $tech = $ref = $pref = '';
+if (isset($_REQUEST['submit'])) {
+  $fname = $_POST['fname'];
+  $lname = $_POST['lname'];
+  $designation = $_POST['designation'];
+  $email = $_POST['email'];
+  $address1 = $_POST['address1'];
+  $address2 = $_POST['address2'];
+  $number = $_POST['number'];
+  $city = $_POST['city'];
+  $state = $_POST['state'];
+  $gender = $_POST['gender'];
+  $zipcode = $_POST['zipcode'];
+  $rstatus = $_POST['rstatus'];
+  $bdate = $_POST['bdate'];
+
+  if (empty($fname) || empty($lname) || empty($designation) || empty($email) || empty($address1) || empty($address2) || empty($number) || empty($city) || empty($state) || empty($gender) || empty($zipcode) || empty($rstatus) || empty($bdate)) {
+    echo 'Some Basic Details are empty';
+  } else {
+    $sql = 'INSERT INTO basic_info (fname,lname,designation,email,address1,address2,number,city,state,zipcode,bdate,gender,rstatus) VALUES ("' . $fname . '","' . $lname . '","' . $designation . '","' . $email . '","' . $address1 . '","' . $address2 . '","' . $number . '","' . $city . '","' . $state . '","' . $zipcode . '","' . $bdate . '","' . $gender . '","' . $rstatus . '")';
+    // echo $sql;
+    $result = $conn->query($sql);
+
+    if ($result == true) {
+      echo  'Basic Data Inserted...<br>';
+    } else {
+      echo 'Error---->' . $sql . '-------->' . $result . '-------->' . $conn->error;
+    }
+  }
+
+  //education POST
+  $s_id = $conn->insert_id;
+  // echo $s_id;
+
+  $coursename = $_POST['coursename'];
+  $school_university = $_POST['school_university'];
+  $year = $_POST['year'];
+  $cgpa_perc = $_POST['cgpa_perc'];
+
+  for ($i = 0; $i < count($coursename); $i++) {
+    if ($coursename[$i] != "" && $school_university[$i] != "" && $year[$i] != "" && $cgpa_perc[$i] != "") {
+      $edu_sql = 'INSERT INTO edu_details (s_id,coursename,school_university,year,cgpa_perc) VALUES ("' . $s_id . '","' . $coursename[$i] . '","' . $school_university[$i] . '","' . $year[$i] . '","' . $cgpa_perc[$i] . '")';
+    }
+    $edu_result = $conn->query($edu_sql);
+    if ($edu_result == true) {
+      echo 'Education Details Added...<br>';
+    } else {
+      echo 'Error in Education details' . $edu_sql . '----------------->' . $edu_result . '--------->' . $conn->error;
+    }
+  }
+
+
+
+
+
+  $companyname = $_POST['companyname'];
+  $work_designation = $_POST['work_designation'];
+  $from_date = $_POST['from_date'];
+  $to_date = $_POST['to_date'];
+
+  for ($i = 0; $i < count($companyname); $i++) {
+    if ($companyname[$i] != "" && $work_designation[$i] != "" && $from_date[$i] != "" && $to_date[$i] != "") {
+      $work_sql = 'INSERT INTO work_exp (s_id,companyname,work_designation,from_date,to_date) VALUES ("' . $s_id . '","' . $companyname[$i] . '","' . $work_designation[$i] . '","' . $from_date[$i] . '","' . $to_date[$i] . '")';
+      echo $work_sql;
+    } else {
+      echo "Some Work Details are Empty.....................";
+    }
+    $work_result = $conn->query($work_sql);
+    // echo $work_result;
+    if ($work_result == true) {
+      echo "Work Data Inserted...........<br>";
+    } else {
+      echo 'Error---->' . $work_sql . '-------->' . $work_result . '-------->' . $conn->error;
+    }
+  }
+
+
+
+  $language = $_POST['language'];
+  // $read = $_POST['read_lan'];
+  // $write = $_POST['write_lan'];
+  // $speak = $_POST['speak'];
+  // $skill = implode(',',$_POST['skill']) ;
+  var_dump($skill);
+
+  for ($i = 0; $i < count($language); $i++) {
+    $skill1 = $_POST['skill'];
+    echo $skill = implode(',', $skill1[$i]);
+    if ($language[$i] != "" && $skill[$i] != "") {
+      $skill_sql = 'INSERT INTO skill_details (s_id,language,skill) VALUES ("' . $s_id . '","' . $language[$i] . '","' . $skill . '")';
+      echo $skill_sql;
+    } else {
+      echo "Some Skill Details are Empty.....................";
+    }
+    $skill_result = $conn->query($skill_sql);
+    // echo $skill_result;
+    if ($skill_result == true) {
+      echo 'Skill Details Added.....<br>';
+    } else {
+      echo 'Error---->' . $skill_sql . '-------->' . $skill_result . '-------->' . $conn->error;
+    }
+  }
+
+
+  $php = $_POST['php'];
+  $mysql = $_POST['mysql'];
+  $laravel = $_POST['laravel'];
+  $oracle = $_POST['oracle'];
+
+  $tech_sql = 'INSERT INTO tech_details (s_id,php,mysql,laravel,oracle) VALUES ("' . $s_id . '","' . $php . '","' . $mysql . '","' . $laravel . '","' . $oracle . '")';
+
+  $tech_result = $conn->query($tech_sql);
+
+  if ($tech_result == true) {
+    $tech = "Technology Added.....";
+  } else {
+    echo 'Error---->' . $tech_sql . '-------->' . $tech_result . '-------->' . $conn->error;
+  }
+
+
+
+
+  $name = $_POST['name'];
+  $contact_number = $_POST['contact_number'];
+  $relation = $_POST['relation'];
+  for ($i = 0; $i < count($name); $i++) {
+    if ($name[$i] != "" && $contact_number[$i] != "" && $relation[$i] != "") {
+      $ref_sql = 'INSERT INTO ref_details (s_id,name,contact_number,relation) VALUES ("' . $s_id . '","' . $name[$i] . '","' . $contact_number[$i] . '","' . $relation[$i] . '")';
+    } else {
+      echo "Some Referance Details are Empty.....................";
+    }
+    $ref_result = $conn->query($ref_sql);
+
+    if ($ref_result == true) {
+      echo "Referance Details Added.....<br>";
+    } else {
+      echo 'Error---->' . $ref_sql . '-------->' . $ref_result . '-------->' . $conn->error;
+    }
+  }
+
+
+  $location = implode(',', $_POST['location']);
+  $notice_period = $_POST['notice_period'];
+  $expected_ctc = $_POST['expected_ctc'];
+  $current_ctc = $_POST['current_ctc'];
+  $department = $_POST['department'];
+
+  $pref_sql = 'INSERT INTO pref_details (s_id,location,notice_period,expected_ctc,current_ctc,department) VALUES ("' . $s_id . '","' . $location . '","' . $notice_period . '","' . $expected_ctc . '","' . $current_ctc . '","' . $department . '")';
+
+  $pref_result = $conn->query($pref_sql);
+  if ($pref_result == true) {
+    $pref = "Preference Details Added.....";
+  } else {
+    echo 'Error---->' . $pref_sql . '-------->' . $pref_result . '-------->' . $conn->error;
+  }
+
+
+
+  $conn->close();
+}
+?>
+
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <title>JobApp in PHP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    #regForm {
+      background-color: #ffffff;
+      margin: 100px auto;
+      font-family: Raleway;
+      padding: 40px;
+      width: 70%;
+      min-width: 300px;
+      height: 100%;
+    }
+
+    .tab {
+      display: none;
+    }
+
+    button {
+      background-color: #04AA6D;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 17px;
+      font-family: Raleway;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    #prevBtn {
+      background-color: #bbbbbb;
+    }
+
+    input.invalid {
+      background-color: #ffdddd;
+    }
+
+    textarea.invalid {
+      background-color: #ffdddd;
+    }
+
+    /* Make circles that indicate the steps of the form: */
+    .step {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbbbbb;
+      border: none;
+      border-radius: 50%;
+      display: inline-block;
+      opacity: 0.5;
+    }
+
+    .step.active {
+      opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+      background-color: #04AA6D;
+    }
+  </style>
+
+</head>
+
+
+<body>
+  <form action='' method='POST' id="regForm" name="form">
+
+    <!-- basic Details  -->
+    <div class="tab">
+      <fieldset style="width: 100%;">
+        <legend>Basic Details</legend>
+        <table class='basictable'>
+          <tr>
+            <td>
+              <label for='firstname'>FirstName:</label>
+              <input type='text' name='fname' id='fname'>
+            </td>
+            <td>
+              <label for='lastname'>LastName:</label>
+              <input type='text' name='lname' id='lname'>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='designation'>Designation:</label>
+              <input type='text' name='designation' id='designation'>
+
+            </td>
+            <td>
+              <label for='email'>Email:</label>
+              <input type='text' name='email' id='email'>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='address1'>Address1:</label>
+              <textarea name='address1' id='address1' cols='30' rows='2'></textarea>
+            </td>
+            <td>
+              <label for='address2'>Address2:</label>
+              <textarea name='address2' id='address2' cols='30' rows='2'></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='number'>Number:</label>
+              <input type='text' name='number' id='number'>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='city'>City:</label>
+              <input type='text' name='city' id='city'>
+            </td>
+            <td>
+              <label for='state'>State:</label>
+              <select name='state' id='state'>
+                <option value='gujarat' name='gujarat'>Gujarat</option>
+                <option value='MP' name='MP'>MP</option>
+                <option value='UP' name='UP'>UP</option>
+                <option value='Rajasthan' name='Rajasthan'>Rajasthan</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='gender'>Gender:</label>
+              <input type='radio' name='gender' id='male' value='male'>male
+              <input type='radio' name='gender' id='female' value='female'>female
+            </td>
+            <td>
+              <label for='zipcode'>ZipCode:</label>
+              <input type='text' name='zipcode' id='zipcode'>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='rstatus'>Relation status</label>
+              <select name='rstatus' id='rstatus'>
+                <option value='sinlge'>Single</option>
+                <option value='merried'>Merried</option>
+              </select>
+            </td>
+            <td>
+              <label for='date'>Date of Birth:</label>
+              <input type='date' name='bdate' id='bdate'>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </div>
+
+
+    <!-- Education Details  -->
+    <div class="tab">
+      <fieldset>
+        <legend>Education Details</legend>
+        <table id='edu_table' class='edu_table'>
+          <tr edu_id1>
+            <td>
+              <label>Caurse Name:</label>
+              <select name="coursename[]" id="coursename">
+
+                <option value="SSC">SSC</option>
+                <option value="HSC">HSC</option>
+                <option value="Bechlor">BE</option>
+                <option value="Master">ME</option>
+              </select>
+            </td>
+            <td>
+              <label>School/University:</label>
+              <input type="text" name="school_university[]" id="school_university">
+            </td>
+            <td>
+              <label>Passiong Year:</label>
+              <input type="text" name="year[]" id="year">
+            </td>
+            <td>
+              <label>Percentage/CGPA:</label>
+              <input type="text" name="cgpa_perc[]" id="cgpa_perc">
+            </td>
+          </tr>
+        </table>
+        <input type="button" onclick="add_row_edu();" value="ADD ROW">
+      </fieldset>
+    </div>
+
+
+    <!-- work experiance details  -->
+    <div class="tab">
+      <fieldset>
+        <legend>Work Experiance</legend>
+
+        <table id='work_table' name='work_table'>
+          <tr id="work_id1">
+            <td>
+              <label for='companyname'>Company Name:</label>
+              <input type='text' name='companyname[]' id='companyname'>
+            </td>
+            <td>
+              <label for='designation'>Designation:</label>
+              <input type='text' name='work_designation[]' id='work_designation'>
+            </td>
+            <td>
+              <label for='from_date1'>From:</label>
+              <input type='date' name='from_date[]' id='from_date'>
+            </td>
+            <td>
+              <label for='to_date1'>To:</label>
+              <input type='date' name='to_date[]' id='to_date'>
+            </td>
+          </tr>
+
+
+        </table>
+        <input type="button" onclick="add_row_work();" value="ADD ROW">
+      </fieldset>
+    </div>
+
+
+    <!-- Skill table details  -->
+    <div class="tab">
+
+      <fieldset>
+        <legend>language known</legend>
+        <?php echo $skill; ?>
+        <table id="skill_table">
+          <tr id="skill_id1">
+            <td>
+              <label>Language:</label>
+              <select name="language[]" id="language">
+                <option value="hindi">Hindi</option>
+                <option value="english">English</option>
+                <option value="gujarati">Gujarati</option>
+              </select>
+            </td>
+            <td>
+              <input type='checkbox' name='skill[0][read]' id='read' value='read'>
+              <label for='read'>Read</label>
+            </td>
+            <td>
+              <input type='checkbox' name='skill[0][write]' id='write' value='write'>
+              <label for='write'>Write</label>
+            </td>
+            <td>
+              <input type='checkbox' name='skill[0][speak]' id='speak' value='speak'>
+              <label for='speak'>Speak</label>
+            </td>
+          </tr>
+        </table>
+        <input type="button" onclick="add_row_skill();" value="ADD ROW">
+
+        <script>
+
+        </script>
+      </fieldset>
+
+
+      <!-- Tech table Details  -->
+      <fieldset>
+        <legend>Technology Known</legend>
+        <?php echo $tech; ?>
+
+        <table>
+          <tr>
+            <td>
+              <label for="php">PHP</label>
+              <input type="radio" name="php" id="php" value="beginner">Beginner
+              <input type="radio" name="php" id="php" value="mideator">Mideator
+              <input type="radio" name="php" id="php" value="export">Export
+            </td>
+          </tr>
+          <tr>
+
+            <td>
+              <label for="mysql">MySql</label>
+              <input type="radio" name="mysql" id="php" value="beginner">Beginner
+              <input type="radio" name="mysql" id="php" value="mideator">Mideator
+              <input type="radio" name="mysql" id="php" value="export">Export
+            </td>
+          </tr>
+          <tr>
+
+            <td>
+              <label for="laravel">Laravel</label>
+              <input type="radio" name="laravel" id="laravel" value="beginner">Beginner
+              <input type="radio" name="laravel" id="laravel" value="mideator">Mideator
+              <input type="radio" name="laravel" id="laravel" value="export">Export
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="oracle">oracle</label>
+              <input type="radio" name="oracle" id="oracle" value="beginner">Beginner
+              <input type="radio" name="oracle" id="oracle" value="mideator">Mideator
+              <input type="radio" name="oracle" id="oracle" value="export">Export
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </div>
+
+    <!-- Referance table Details  -->
+    <div class="tab">
+
+      <fieldset>
+        <legend>Referance Details</legend>
+        <?php echo $ref; ?>
+        <table id="ref_table">
+          <tr id="ref_id1">
+            <td>
+              <label for="name1">Name:</label>
+              <input type="text" name="name[]" id="name">
+            </td>
+            <td>
+              <label for="contact">Contact Number:</label>
+              <input type="text" name="contact_number[]" id="contact_number">
+            </td>
+            <td>
+              <label for="relation">Relation</label>
+              <input type="text" name="relation[]" id="relation">
+            </td>
+          </tr>
+
+
+
+        </table>
+        <input type="button" onclick="add_row_ref();" value="ADD ROW">
+      </fieldset>
+    </div>
+
+
+    <!-- preferance table details  -->
+    <!-- preferance table details  -->
+    <div class="tab">
+      <fieldset>
+        <legend>Preferance Details</legend>
+        <table>
+          <?php echo $pref; ?>
+          <tr>
+            <td rowspan="4">
+              <label for="location">Preferd Location:</label>
+              <select name="location[]" id="location" multiple>
+                <option value="ahmedabad">Ahmedabad</option>
+                <option value="surat">surat</option>
+                <option value="gandhinagar">gandhinagar</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="notice_period">Notice Period:</label>
+              <input type="text" name="notice_period" id="notice_period">
+            <td>
+              <label for="department">Department:</label>
+              <select name="department" id="department">
+                <option value="design">Design</option>
+                <option value="hr">HR</option>
+                <option value="networking">Networking</option>
+                <option value="marketing">Marketing</option>
+              </select>
+            </td>
+            </td>
+          </tr>
+          <tr>
+
+            <td>
+              <label for="expected_ctc">Expected CTC:</label>
+              <input type="text" name="expected_ctc" id="expected_ctc">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="current_ctc">Current CTC:</label>
+              <input type="text" name="current_ctc" id="current_ctc">
+            </td>
+          </tr>
+
+
+
+
+        </table>
+      </fieldset>
+    </div>
+    <div style="overflow:auto;">
+      <div style="float:right;">
+        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" name="submit" id="nextBtn" onclick="nextPrev(1)">Next</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <span class="step"></span>
+      <span class="step"></span>
+      <span class="step"></span>
+      <span class="step"></span>
+      <span class="step"></span>
+    </div>
+
+    <!-- <input type='submit' name='submit' value='Submit'> -->
+
+  </form>
+
+  <script>
+    // for Wizard
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+    showTab(currentTab); // Display the current tab
+
+    function showTab(n) {
+      // This function will display the specified tab of the form...
+      var x = document.getElementsByClassName("tab");
+      x[n].style.display = "block";
+      //... and fix the Previous/Next buttons:
+      if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+      } else {
+        document.getElementById("prevBtn").style.display = "inline";
+      }
+      if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").innerHTML = "Submit";
+      } else {
+        document.getElementById("nextBtn").innerHTML = "Next";
+      }
+      //... and run a function that will display the correct step indicator:
+      fixStepIndicator(n)
+    }
+
+    function nextPrev(n) {
+      // This function will figure out which tab to display
+      var x = document.getElementsByClassName("tab");
+      // Exit the function if any field in the current tab is invalid:
+      if (n == 1 && !validateForm()) return false;
+      // Hide the current tab:
+      x[currentTab].style.display = "none";
+      // Increase or decrease the current tab by 1:
+      currentTab = currentTab + n;
+      // if you have reached the end of the form...
+      if (currentTab >= x.length) {
+        // ... the form gets submitted:
+        document.getElementById("regForm").submit();
+        return false;
+      }
+      // Otherwise, display the correct tab:
+      showTab(currentTab);
+    }
+
+    function validateForm() {
+      // This function deals with validation of the form fields
+      var x, y, i, valid = true;
+      x = document.getElementsByClassName("tab");
+      y = x[currentTab].getElementsByTagName("input");
+      // A loop that checks every input field in the current tab:
+      for (i = 0; i < y.length; i++) {
+        // If a field is empty...
+        if (y[i].value == "") {
+          // add an "invalid" class to the field:
+          y[i].className += " invalid";
+          // and set the current valid status to false
+          valid = false;
+        }
+      }
+      z = x[currentTab].getElementsByTagName("textarea");
+      // A loop that checks every input field in the current tab:
+      for (i = 0; i < z.length; i++) {
+        // If a field is empty...
+        if (z[i].value == "") {
+          // add an "invalid" class to the field:
+          z[i].className += " invalid";
+          // and set the current valid status to false
+          valid = false;
+        }
+      }
+      
+      
+      // If the valid status is true, mark the step as finished and valid:
+      if (valid) {
+        document.getElementsByClassName("step")[currentTab].className += " finish";
+      }
+      return valid; // return the valid status
+    }
+
+    
+
+    function fixStepIndicator(n) {
+      // This function removes the "active" class of all steps...
+      var i, x = document.getElementsByClassName("step");
+      for (i = 0; i < x.length; i++) {
+        x[i].className = x[i].className.replace(" active", "");
+      }
+      //... and adds the "active" class on the current step:
+      x[n].className += " active";
+    }
+
+    function add_row_work() {
+      $work_row_no = $("#work_table tr").length;
+      $work_row_no = $work_row_no + 1;
+      $("#work_table tr:last").after("<tr id='work_id" + $work_row_no + "'><td><label for='companyname'>Company Name:</label><input type='text' name ='companyname[]'></td><td> <label for='designation'>Designation:</label><input type='text' name ='work_designation[]'></td><td> <label for='from_date1'>From:</label><input type='date' name ='from_date[]'></td><td> <label for='to_date1'>To:</label><input type='date' name ='to_date[]'></td><td><input type='button' value='DELETE' onclick=delete_work_row('work_id" + $work_row_no + "')></td></tr>");
+    }
+
+    function delete_work_row(work_row_no) {
+      $('#' + work_row_no).remove();
+    }
+
+    function add_row_edu() {
+      $edu_row_no = $("#edu_table tr").length;
+      $edu_row_no = $edu_row_no + 1;
+      $("#edu_table tr:last").after("<tr id='edu_id" + $edu_row_no + "'><td> <label>Caurse Name:</label><select name='coursename[]' id='coursename'><option value='SSC'>SSC</option><option value='HSC'>HSC</option><option value='Bechlor'>BE</option><option value='Master'>ME</option></select></td><td> <label>School/University:</label><input type='text' name='school_university[]' id='school_university' ></td><td> <label>Passiong Year:</label><input type='text' name='year[]' id='year' ></td><td> <label>Percentage/CGPA:</label><input type='text' name='cgpa_perc[]' id='cgpa_perc' ></td><td><input type='button' value='DELETE' onclick=delete_edu_row('edu_id" + $edu_row_no + "')></td></tr>");
+    }
+
+    function delete_edu_row(edu_row_no) {
+      $('#' + edu_row_no).remove();
+    }
+
+    function add_row_ref() {
+      $ref_row_no = $("#ref_table tr").length;
+      $ref_row_no = $ref_row_no + 1;
+      $("#ref_table tr:last").after("<tr id='ref_id" + $ref_row_no + "'><td> <label for='name1'>Name:</label><input type='text' name='name[]' id='name'></td><td> <label for='contact'>Contact Number:</label> <input type='text' name='contact_number[]' id='contact_number'></td><td> <label for='relation'>Relation</label><input type='text' name='relation[]' id='relation'></td><td><input type='button' value='DELETE' onclick=delete_edu_row('ref_id" + $ref_row_no + "')></td></tr>");
+    }
+
+    function delete_edu_row(ref_row_no) {
+      $('#' + ref_row_no).remove();
+    }
+
+    function add_row_skill() {
+      $skill_row_no = $("#skill_table tr").length;
+      // $skill_row_no = $skill_row_no ;
+      $("#skill_table tr:last").after("<tr id='skill_id" + $skill_row_no + "'><td> <label>Language:</label> <select name='language[]' id='language'><option value='hindi'>Hindi</option><option value='english'>English</option><option value='gujarati'>Gujarati</option></select></td><td> <input type='checkbox' name='skill[" + $skill_row_no + "][read]' id='read' value='read'><label for='read'>Read</label></td><td> <input type='checkbox' name='skill[" + $skill_row_no + "][write]' id='write' value='write'><label for='write'>Write</label></td><td> <input type='checkbox' name='skill[" + $skill_row_no + "][speak]' id='speak' value='speak'><label for='speak'>Speak</label></td><td><input type='button' value='DELETE' onclick=delete_edu_row('skill_id" + $skill_row_no + "')></td></tr>");
+    }
+
+    function delete_edu_row(skill_row_no) {
+      $('#' + skill_row_no).remove();
+    }
+  </script>
+
+</body>
+
+</html>
